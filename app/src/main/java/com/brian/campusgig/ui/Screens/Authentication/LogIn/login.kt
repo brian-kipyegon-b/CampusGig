@@ -182,14 +182,14 @@ fun LogInPage(
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(
-                            text = "Create Account",
+                            text = "Log In",
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black
                         )
 
                         Text(
-                            text = "Join CampusGig and discover amazing opportunities.",
+                            text = "Continue with CampusGig to discover amazing opportunities.",
                             fontSize = 14.sp,
                             color = Color.Gray,
                             textAlign = TextAlign.Start,
@@ -208,7 +208,7 @@ fun LogInPage(
                     ) {
                         AsyncImage(
                             model = R.drawable.register,
-                            contentDescription = "Register illustration",
+                            contentDescription = "login illustration",
                             modifier = Modifier.fillMaxSize()
                         )
                     }

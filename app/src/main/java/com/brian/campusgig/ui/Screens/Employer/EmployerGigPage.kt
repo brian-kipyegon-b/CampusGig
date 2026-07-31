@@ -77,124 +77,109 @@ fun EmployerGigPage(navHostController: NavHostController) {
 
     Scaffold(
         topBar = {
-            // FIX: Wrapped in a Column so they stack vertically instead of overlapping
-            Column {
-                TopAppBar(
-                    title = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(painterResource(R.drawable.logo), "Logo", modifier = Modifier.size(32.dp), tint = PrimaryPurple)
-                            Spacer(Modifier.width(8.dp))
-                            Text(buildAnnotatedString {
-                                append("Campus")
-                                withStyle(SpanStyle(color = PrimaryPurple, fontWeight = FontWeight.Bold)) { append("Gig") }
-                            }, fontSize = 20.sp)
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = { isSearchActive = !isSearchActive }) {
-                            Icon(
-                                painter = painterResource(if (isSearchActive) R.drawable.delete else R.drawable.search),
-                                contentDescription = if (isSearchActive) "Close Search" else "Search",
-                                tint = PrimaryPurple
-                            )
-                        }
-                        Box {
-
-                            IconButton(
-                                onClick = {
-                                    navHostController.navigate(Notifications)
-                                }
-                            ) {
-
-                                Icon(
-                                    painter = painterResource(R.drawable.notifications),
-                                    contentDescription = "Notifications"
-                                )
-
-                            }
-
-                            if (unreadCount > 0) {
-
-                                Badge(
-                                    modifier = Modifier.align(Alignment.TopEnd),
-                                    containerColor = Color.Red,
-                                    contentColor = Color.White
-                                ) {
-                                    Text(unreadCount.toString())
-                                }
-
-                            }
-
-                        }
+            TopAppBar(
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(painterResource(R.drawable.logo), "Logo", modifier = Modifier.size(32.dp), tint = PrimaryPurple)
+                        Spacer(Modifier.width(8.dp))
+                        Text(buildAnnotatedString {
+                            append("Campus")
+                            withStyle(SpanStyle(color = PrimaryPurple, fontWeight = FontWeight.Bold)) { append("Gig") }
+                        }, fontSize = 20.sp)
                     }
-                )
-
-                // Search and Filters Section
-                Surface(
-                    color = MaterialTheme.colorScheme.surface,
-                    shadowElevation = 2.dp // Adds a clean, professional separation line
-                ) {
-                    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                        if (isSearchActive) {
-                            OutlinedTextField(
-                                value = searchQuery,
-                                onValueChange = { searchQuery = it },
-                                placeholder = { Text("Search gigs...", fontSize = 14.sp) },
-                                singleLine = true,
-                                modifier = Modifier.fillMaxWidth(),
-                                trailingIcon = {
-                                    if (searchQuery.isNotEmpty()) {
-                                        IconButton(onClick = { searchQuery = "" }) {
-                                            Icon(painterResource(R.drawable.delete), "Clear", tint = Color.Gray, modifier = Modifier.size(20.dp))
-                                        }
-                                    }
-                                },
-                                shape = RoundedCornerShape(12.dp),
-                                colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = PrimaryPurple,
-                                    unfocusedBorderColor = Color.LightGray
-                                )
-                            )
-                            Spacer(Modifier.height(8.dp))
+                },
+                actions = {
+                    IconButton(onClick = { isSearchActive = !isSearchActive }) {
+                        Icon(
+                            painter = painterResource(if (isSearchActive) R.drawable.cancel else R.drawable.search),
+                            contentDescription = "Search",
+                            tint = PrimaryPurple
+                        )
+                    }
+                    Box {
+                        IconButton(onClick = { navHostController.navigate(Notifications) }) {
+                            Icon(painterResource(R.drawable.notifications), "Notifications")
                         }
-
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                            FilterChip(
-                                selected = selectedFilter == "All",
-                                onClick = { selectedFilter = "All" },
-                                label = { Text("All (${gigs.size})") }
-                            )
-                            FilterChip(
-                                selected = selectedFilter == "Open",
-                                onClick = { selectedFilter = "Open" },
-                                label = { Text("Open (${gigs.count { it.status == "Open" }})") }
-                            )
-                            FilterChip(
-                                selected = selectedFilter == "Closed",
-                                onClick = { selectedFilter = "Closed" },
-                                label = { Text("Closed (${gigs.count { it.status == "Closed" }})") }
-                            )
+                        if (unreadCount > 0) {
+                            Badge(
+                                modifier = Modifier.align(Alignment.TopEnd).padding(4.dp),
+                                containerColor = Color.Red,
+                                contentColor = Color.White
+                            ) {
+                                Text(unreadCount.toString(), fontSize = 10.sp)
+                            }
                         }
                     }
                 }
-            }
+            )
         },
         bottomBar = { employerBottomNavigation(navHostController) }
     ) { paddingValues ->
-        Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                when {
-                    isLoading -> item {
-                        Box(Modifier.fillMaxWidth().padding(40.dp), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator(color = PrimaryPurple)
-                        }
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Search Bar Item
+            if (isSearchActive) {
+                item {
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        placeholder = { Text("Search your gigs...", fontSize = 14.sp) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = {
+                            if (searchQuery.isNotEmpty()) {
+                                IconButton(onClick = { searchQuery = "" }) {
+                                    Icon(painterResource(R.drawable.delete), "Clear", modifier = Modifier.size(20.dp))
+                                }
+                            }
+                        },
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
+            }
+
+            // Filters Item
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val openCount = gigs.count { it.status == "Open" }
+                    val closedCount = gigs.count { it.status == "Closed" }
+                    
+                    FilterChip(
+                        selected = selectedFilter == "All",
+                        onClick = { selectedFilter = "All" },
+                        label = { Text("All (${gigs.size})") }
+                    )
+                    FilterChip(
+                        selected = selectedFilter == "Open",
+                        onClick = { selectedFilter = "Open" },
+                        label = { Text("Open ($openCount)") }
+                    )
+                    FilterChip(
+                        selected = selectedFilter == "Closed",
+                        onClick = { selectedFilter = "Closed" },
+                        label = { Text("Closed ($closedCount)") }
+                    )
+                }
+            }
+
+            // Gigs List
+            when {
+                isLoading -> item {
+                    Box(Modifier.fillMaxWidth().padding(40.dp), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = PrimaryPurple)
                     }
-                    gigs.isEmpty() -> item { EmptyGigState { navHostController.navigate(CreateGig) } }
-                    else -> items(filteredGigs) { gig -> GigCard(gig, navHostController) { gigToDelete = gig } }
+                }
+                filteredGigs.isEmpty() -> item {
+                    EmptyGigState { navHostController.navigate(CreateGig) }
+                }
+                else -> items(filteredGigs) { gig ->
+                    GigCard(gig, navHostController) { gigToDelete = gig }
                 }
             }
         }
@@ -210,11 +195,22 @@ fun EmployerGigPage(navHostController: NavHostController) {
 
 @Composable
 fun GigCard(gig: Gig, navHostController: NavHostController, onDeleteClick: () -> Unit) {
-    Card(shape = RoundedCornerShape(16.dp), elevation = CardDefaults.cardElevation(2.dp)) {
-        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(48.dp).background(PrimaryPurple.copy(0.1f), RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier.size(48.dp).background(PrimaryPurple.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(painterResource(R.drawable.category), null, tint = PrimaryPurple, modifier = Modifier.size(24.dp))
             }
+            
             Spacer(Modifier.width(16.dp))
 
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -228,27 +224,33 @@ fun GigCard(gig: Gig, navHostController: NavHostController, onDeleteClick: () ->
                     Text(gig.applicants.toString(), fontWeight = FontWeight.Bold, color = PrimaryPurple, fontSize = 18.sp)
                     Text("Applications", fontSize = 10.sp, color = Color.Gray)
                 }
-                Surface(shape = RoundedCornerShape(8.dp), color = if (gig.status == "Open") Color(0xFFE8F5E9) else Color(0xFFFFEBEE)) {
-                    Text(gig.status, Modifier.padding(horizontal = 8.dp, vertical = 4.dp), fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = if (gig.status == "Open") Color(0xFF2E7D32) else Color.Red)
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = if (gig.status == "Open") Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
+                ) {
+                    Text(
+                        text = gig.status,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (gig.status == "Open") Color(0xFF2E7D32) else Color.Red
+                    )
                 }
                 Button(
-                    onClick = {
-                        navHostController.navigate(
-                            EmployerApplicants(gig.gigId)
-                        )
-                    },
+                    onClick = { navHostController.navigate(EmployerApplicants(gig.gigId)) },
                     shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = PrimaryPurple
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = PrimaryPurple),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                    modifier = Modifier.height(32.dp)
                 ) {
-                    Text("View Applicants")
+                    Text("Applicants", fontSize = 11.sp)
                 }
             }
-            }
+            
             GigMenu(gig, navHostController, onDeleteClick)
         }
     }
+}
 
 
 @Composable

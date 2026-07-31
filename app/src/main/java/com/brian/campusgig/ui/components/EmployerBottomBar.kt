@@ -15,11 +15,10 @@ import androidx.navigation.NavHostController
 import com.brian.campusgig.R
 import com.brian.campusgig.data.models.studentNavItem
 import com.brian.campusgig.ui.Navigation.CreateGig
-import com.brian.campusgig.ui.Navigation.EmployerApplicants
 import com.brian.campusgig.ui.Navigation.EmployerApplications
 import com.brian.campusgig.ui.Navigation.EmployerDashboard
 import com.brian.campusgig.ui.Navigation.EmployerGigs
-import com.brian.campusgig.ui.Navigation.EmployerProfile
+import com.brian.campusgig.ui.Navigation.Profile
 import com.brian.campusgig.ui.theme.PrimaryPurple
 
 @Composable
@@ -31,7 +30,7 @@ fun employerBottomNavigation(
         studentNavItem("Add Gig", CreateGig, R.drawable.add),
         studentNavItem("My Gigs", EmployerGigs, R.drawable.gigs),
         studentNavItem("Applications", EmployerApplications, R.drawable.applications_icon),
-        studentNavItem("Profile", EmployerProfile, R.drawable.user),
+        studentNavItem("Profile", Profile, R.drawable.user),
     )
 
     NavigationBar() {

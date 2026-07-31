@@ -22,6 +22,7 @@ import coil.compose.AsyncImage
 import com.brian.campusgig.R
 import com.brian.campusgig.data.models.Application
 import com.brian.campusgig.ui.Screens.Authentication.AuthViewModel
+import com.brian.campusgig.ui.components.studentBottomNavigation
 import com.brian.campusgig.ui.theme.PrimaryPurple
 import java.util.UUID
 
@@ -75,7 +76,8 @@ fun ApplicationPage(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
             )
-        }
+        },
+        bottomBar = { studentBottomNavigation(navHostController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier

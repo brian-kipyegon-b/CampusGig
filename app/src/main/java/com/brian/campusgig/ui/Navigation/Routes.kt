@@ -9,8 +9,7 @@ object Landing
 @Serializable
 object Contact
 
-@Serializable
-object Profile
+
 
 @Serializable
 object Login
@@ -30,8 +29,7 @@ object EmployerDashboard
 @Serializable
 object StudentMessages
 
-@Serializable
-object StudentProfile
+
 
 @Serializable
 object MyApplications
@@ -42,8 +40,6 @@ object CreateGig
 @Serializable
 object EmployerGigs
 
-@Serializable
-object EmployerProfile
 
 @Serializable
 data class GigDetails(
@@ -92,3 +88,9 @@ object EmployerApplications
 
 @Serializable
 object Notifications
+
+@Serializable
+object Profile
+
+@Serializable
+object CompleteProfile

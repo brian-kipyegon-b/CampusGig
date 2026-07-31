@@ -11,14 +11,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.brian.campusgig.R
 import com.brian.campusgig.data.models.studentNavItem
 import com.brian.campusgig.ui.Navigation.BrowseGigs
+import com.brian.campusgig.ui.Navigation.Profile
 import com.brian.campusgig.ui.Navigation.StudentApplications
 import com.brian.campusgig.ui.Navigation.StudentDashboard
 import com.brian.campusgig.ui.Navigation.StudentMessages
-import com.brian.campusgig.ui.Navigation.StudentProfile
 import com.brian.campusgig.ui.theme.PrimaryPurple
 
 @Composable
@@ -29,8 +30,7 @@ fun studentBottomNavigation(
         studentNavItem("Home", StudentDashboard, R.drawable.home),
         studentNavItem("Browse Gigs", BrowseGigs, R.drawable.all_gigs),
         studentNavItem("Applications", StudentApplications, R.drawable.applications),
-        studentNavItem("Messages", StudentMessages, R.drawable.message),
-        studentNavItem("Profile", StudentProfile, R.drawable.user),
+        studentNavItem("Profile", Profile, R.drawable.user),
     )
 
     NavigationBar() {
@@ -43,7 +43,8 @@ fun studentBottomNavigation(
                     Text(
                         text = route.name,
                         style = TextStyle(
-                            color = Color.Black
+                            color = Color.Black,
+                            fontSize = 16.sp
                         )
                     )
                 },
@@ -55,7 +56,7 @@ fun studentBottomNavigation(
                         ),
                         tint = PrimaryPurple,
                         contentDescription = "Navigate to ${route.name}",
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(28.dp)
                     )
                 }
             )

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brian.campusgig.data.models.User
 import com.brian.campusgig.data.repository.AuthRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,10 @@ class AuthViewModel : ViewModel() {
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState.asStateFlow()
 
+    private val firestore = FirebaseFirestore.getInstance()
+
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user
     fun registerUser(username: String, email: String, password: String, phoneNumber: String, confirmPassword: String, role: String) {
         if (role.isEmpty()) {
             _authState.value = AuthState.Error("Please select a role (Student or Employer)")
@@ -77,8 +82,24 @@ class AuthViewModel : ViewModel() {
             )
         }
     }
+    fun loadUser(uid: String) {
+        firestore.collection("users")
+            .document(uid)
+            .get()
+            .addOnSuccessListener { document ->
+
+                _user.value = document.toObject(User::class.java)
+
+            }
+
+    }
 
     fun resetState() {
+        _authState.value = AuthState.Idle
+    }
+
+    fun logout() {
+        repo.logout()
         _authState.value = AuthState.Idle
     }
 }

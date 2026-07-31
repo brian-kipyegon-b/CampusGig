@@ -15,10 +15,10 @@ import com.brian.campusgig.ui.Screens.Employer.EmployerApplicationsScreen
 import com.brian.campusgig.ui.Screens.Employer.EmployerDashboard
 import com.brian.campusgig.ui.Screens.Employer.EmployerGigDetailsScreen
 import com.brian.campusgig.ui.Screens.Employer.EmployerGigPage
-import com.brian.campusgig.ui.Screens.Employer.EmployerProfilePage
 import com.brian.campusgig.ui.Screens.Employer.createGigScreen
 import com.brian.campusgig.ui.Screens.Landing.LandingPage
 import com.brian.campusgig.ui.Screens.Notifications.NotificationPage
+import com.brian.campusgig.ui.Screens.Profile.ProfileScreen
 import com.brian.campusgig.ui.Screens.Splash.SplashScreen
 import com.brian.campusgig.ui.Screens.Student.ApplicationPage
 import com.brian.campusgig.ui.Screens.Student.BrowseGigsPage
@@ -38,18 +38,18 @@ fun Navigation(
     ) {
         composable<Landing>{LandingPage(modifier, navHostController)}
         composable<Splash>{ SplashScreen(navHostController) }
-        composable<Profile>{}
         composable<Contact>{}
         composable<Register>{RegisterPage(modifier, navHostController)}
         composable<Login>{LogInPage(modifier, navHostController)}
         composable<StudentDashboard> { StudentDashboardPage(navHostController) }
         composable<EmployerDashboard> { EmployerDashboard(navHostController) }
         composable<StudentMessages>{}
-        composable<StudentProfile>{}
         composable<MyApplications>{}
-        composable <CreateGig>{createGigScreen(navHostController)  }
-        composable <EmployerGigs>{ EmployerGigPage(navHostController) }
-        composable <EmployerProfile>{ EmployerProfilePage(navHostController) }
+        composable<EmployerGigs> {
+            EmployerGigPage(
+                navHostController = navHostController
+            )
+        }
         composable<EditGig> { backStackEntry ->
             val args = backStackEntry.toRoute<EditGig>()
             EditGigScreen(
@@ -86,6 +86,7 @@ fun Navigation(
         composable<StudentApplications> {
             StudentApplicationsPage(navHostController)
         }
+        composable <CreateGig>{createGigScreen(navHostController)}
 
         composable<ApplicationDetails> { backStackEntry ->
             val args = backStackEntry.toRoute<ApplicationDetails>()
@@ -108,11 +109,11 @@ fun Navigation(
 
         composable<EmployerApplications> {
             EmployerApplicationsScreen(
+                navHostController = navHostController,
                 onApplicationClick = { applicationId ->
                     navHostController.navigate(
                         EmployerApplicationDetails(applicationId)
                     )
-
                 }
             )
 
@@ -127,6 +128,11 @@ fun Navigation(
         }
         composable<Notifications> {
             NotificationPage(navHostController)
+        }
+        composable<Profile> {
+            ProfileScreen(
+                navController = navHostController
+            )
         }
     }
 }

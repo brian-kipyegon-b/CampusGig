@@ -45,6 +45,7 @@ import androidx.navigation.NavHostController
 import com.brian.campusgig.R
 import com.brian.campusgig.ui.Navigation.ApplicationDetails
 import com.brian.campusgig.ui.components.StudentApplicationCard
+import com.brian.campusgig.ui.components.studentBottomNavigation
 import com.brian.campusgig.ui.theme.PrimaryPurple
 import com.google.firebase.auth.FirebaseAuth
 
@@ -120,7 +121,8 @@ fun StudentApplicationsPage(
                     containerColor = PrimaryPurple
                 )
             )
-        }
+        },
+        bottomBar = { studentBottomNavigation(navHostController) }
     ) { padding ->
 
         if (loading) {

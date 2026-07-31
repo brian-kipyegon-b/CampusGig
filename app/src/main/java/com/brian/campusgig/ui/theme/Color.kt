@@ -19,3 +19,7 @@ val Background = Color(0xFFF7F4FF)
 val MainText = Color(0xFF1D1B3A)
 val SecondaryText = Color(0xFF6E7191)
 val Border = Color(0xFFD8CCFF)
+
+val PrimaryGreen = Color(0xFF2E7D32)
+val BackgroundGreen = Color(0xFFF1F8E9)
+val LogoutRed = Color(0xFFD32F2F)
